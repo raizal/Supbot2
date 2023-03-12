@@ -20,6 +20,7 @@ from appium.webdriver import Remote
 import time
 from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 
 from supbot import g, helper
 # noinspection PyBroadException
@@ -173,9 +174,9 @@ class AppDriver:
         """
         try:
             if not search:
-                search = self.driver.find_elements_by_id("com.whatsapp:id/conversations_row_contact_name")
+                search = self.driver.find_elements(By.ID, "com.whatsapp:id/conversations_row_contact_name")
             else:
-                search = self.driver.find_element_by_id("com.whatsapp:id/result_list").find_elements_by_id(
+                search = self.driver.find_element(By.ID, "com.whatsapp:id/result_list").find_elements(By.ID,
                     "com.whatsapp:id/conversations_row_contact_name")
             element = next(x for x in search if helper.contact_number_equal(x.text, chat_name))
             element.click()
@@ -185,12 +186,12 @@ class AppDriver:
 
     def get_search_text(self):
         try:
-            element = self.driver.find_element_by_id("com.whatsapp:id/search_input")
+            element = self.driver.find_element(By.ID, "com.whatsapp:id/search_input")
         except NoSuchElementException:
             try:
                 # backwards compatibility
                 g.logger.warning("Please update whatsapp version, older version might be a bit slow")
-                element = self.driver.find_element_by_id("com.whatsapp:id/search_src_text")
+                element = self.driver.find_element(By.ID, "com.whatsapp:id/search_src_text")
             except NoSuchElementException:
                 return None
 
@@ -207,7 +208,7 @@ class AppDriver:
 
     def click_search(self) -> bool:
         try:
-            self.driver.find_element_by_id("com.whatsapp:id/menuitem_search").click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/menuitem_search").click()
             return True
         except Exception:
             return False
@@ -222,7 +223,7 @@ class AppDriver:
         :param message:
         """
         try:
-            element = self.driver.find_element_by_id('com.whatsapp:id/entry')
+            element = self.driver.find_element(By.ID, 'com.whatsapp:id/entry')
 
             if mentions:
                 # break the message into parts depending on mentions
@@ -240,7 +241,7 @@ class AppDriver:
             else:
                 element.send_keys(message)
 
-            element = self.driver.find_element_by_id('com.whatsapp:id/send')
+            element = self.driver.find_element(By.ID, 'com.whatsapp:id/send')
             element.click()
 
             return True
@@ -248,12 +249,12 @@ class AppDriver:
             return False
 
     def click_on_last_chat_link(self):
-        self.driver.find_elements_by_id("com.whatsapp:id/message_text").pop().click()
+        self.driver.find_elements(By.ID, "com.whatsapp:id/message_text").pop().click()
         return True
 
     def click_ok(self):
         try:
-            ok = self.driver.find_element_by_id("android:id/button1")
+            ok = self.driver.find_element(By.ID, "android:id/button1")
             ok.click()
             return True
         except NoSuchElementException:
@@ -268,14 +269,14 @@ class AppDriver:
 
     def press_chat_back(self):
         try:
-            self.driver.find_element_by_id("com.whatsapp:id/back").click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/back").click()
             return True
         except Exception:
             return False
 
     def press_search_back(self):
         try:
-            self.driver.find_element_by_xpath("//android.widget.ImageView[@content-desc='Back'] or "
+            self.driver.find_element(By.XPATH, "//android.widget.ImageView[@content-desc='Back'] or "
                                               "//android.widget.ImageButton[@content-des='Close']").click()
             return True
         except Exception:
@@ -283,7 +284,7 @@ class AppDriver:
 
     def press_mention(self):
         try:
-            self.driver.find_element_by_id("com.whatsapp:id/mention_attach").click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/mention_attach").click()
             return True
         except Exception:
             return False
@@ -296,7 +297,7 @@ class AppDriver:
         """
         try:
             self.driver.implicitly_wait(1)
-            element = self.driver.find_element_by_xpath('//android.widget.TextView[@resource-id='
+            element = self.driver.find_element(By.XPATH, '//android.widget.TextView[@resource-id='
                                                         '"com.whatsapp:id/conversations_row_message_count"]/../..'
                                                         '//android.widget.TextView[@resource-id="com.whatsapp:id'
                                                         '/conversations_row_contact_name"]')
@@ -307,7 +308,7 @@ class AppDriver:
             self.driver.implicitly_wait(self.implicit_wait)
 
     def get_new_bubbles(self):
-        return self.driver.find_elements_by_xpath('//android.widget.TextView[@resource-id='
+        return self.driver.find_elements(By.XPATH, '//android.widget.TextView[@resource-id='
                                                   '"com.whatsapp:id/unread_divider_tv"]/../..'
                                                   '//following-sibling::android.view.ViewGroup'
                                                   '//android.widget.LinearLayout[@resource-id='
@@ -344,18 +345,18 @@ class AppDriver:
             os.utime(image_loc, (time.time(), time.time()))
             self.driver.push_file(destination_path="/storage/emulated/0/Supbot/temp" + ext,
                                   source_path=image_loc)
-            self.driver.find_element_by_id("com.whatsapp:id/input_attach_button").click()
-            self.driver.find_element_by_id("com.whatsapp:id/pickfiletype_gallery").click()
-            self.driver.find_element_by_xpath('//android.widget.TextView[@text="Supbot"]').click()
-            self.driver.find_element_by_xpath('//android.widget.ImageView').click()
-            self.driver.find_element_by_id("com.whatsapp:id/send").click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/input_attach_button").click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/pickfiletype_gallery").click()
+            self.driver.find_element(By.XPATH, '//android.widget.TextView[@text="Supbot"]').click()
+            self.driver.find_element(By.XPATH, '//android.widget.ImageView').click()
+            self.driver.find_element(By.ID, "com.whatsapp:id/send").click()
             return True
         except Exception:
             return False
 
     def scroll_chat(self, reverse=False):
         try:
-            elements = self.driver.find_elements_by_id("com.whatsapp:id/conversations_row_contact_name")
+            elements = self.driver.find_elements(By.ID, "com.whatsapp:id/conversations_row_contact_name")
             if reverse:
                 self.driver.scroll(elements[1], elements[-1], 3000)
             else:
@@ -381,7 +382,7 @@ class AppDriver:
             if slow:
                 self.driver.implicitly_wait(self.implicit_wait)
 
-            element = self.driver.find_element_by_id(query) if not xpath else self.driver.find_element_by_xpath(query)
+            element = self.driver.find_element(By.ID, query) if not xpath else self.driver.find_element(By.XPATH, query)
             return element is not None
         except Exception:
             return False
@@ -398,7 +399,7 @@ class AppDriver:
     def check_scroll_top(self):
         """On top check is done by temp group pined on top"""
         try:
-            search = self.driver.find_elements_by_id("com.whatsapp:id/conversations_row_contact_name")
+            search = self.driver.find_elements(By.ID, "com.whatsapp:id/conversations_row_contact_name")
             element = next(x for x in search if helper.contact_number_equal(x.text, "!temp"))
             return element is not None
         except Exception:
@@ -423,7 +424,7 @@ class AppDriver:
     @check_delay
     def check_chat(self, chat_name):
         try:
-            name = self.driver.find_element_by_id("com.whatsapp:id/conversation_contact_name").text
+            name = self.driver.find_element(By.ID, "com.whatsapp:id/conversation_contact_name").text
             return helper.contact_number_equal(name, chat_name)
         except Exception:
             return False
@@ -439,13 +440,13 @@ class Bubble:
 
     def get_message(self) -> str:
         try:
-            return self.bubble.find_element_by_id("com.whatsapp:id/message_text").text
+            return self.bubble.find_element(By.ID, "com.whatsapp:id/message_text").text
         except Exception:
             return ""
 
     def _get_author_from_me(self) -> Optional[str]:
         try:
-            return self.bubble.find_element_by_id("com.whatsapp:id/name_in_group_tv").text
+            return self.bubble.find_element(By.ID, "com.whatsapp:id/name_in_group_tv").text
         except Exception:
             return None
 
