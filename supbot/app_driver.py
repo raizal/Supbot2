@@ -105,7 +105,7 @@ class AppDriver:
             def appium_logging():
                 g.logger.debug("launching appium server on {}".format(port))
                 try:
-                    g.appium_process = subprocess.Popen(shlex.split(f"appium --port {port}"),
+                    g.appium_process = subprocess.Popen(shlex.split(f"appium --bash-path /wd/hub --port {port}"),
                                                         stdout=subprocess.PIPE, shell=True)
                     appium_logs = logging.getLogger('appium')
                     while g.system.status > -1:
@@ -129,7 +129,7 @@ class AppDriver:
             "udid": device_name,
             "appPackage": "com.whatsapp",
             "appActivity": "com.whatsapp.HomeActivity",
-            "noReset": "true",
+            "noReset": True,
             "deviceName": "Android Emulator"
         }
         try:
@@ -368,7 +368,7 @@ class AppDriver:
     # todo make better architecture for check
 
     # todo divide this method into 2 decorators, 1 enables slow check (which u already did), other does the check
-    #  logic in try except region helper 
+    #  logic in try except region helper
     def check(self, query, slow: bool = False, xpath: bool = False):
         """
         checks if an element is on screen
