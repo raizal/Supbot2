@@ -130,7 +130,8 @@ class AppDriver:
             "appPackage": "com.whatsapp",
             "appActivity": "com.whatsapp.HomeActivity",
             "noReset": True,
-            "deviceName": "Android Emulator"
+            "deviceName": "Android Emulator",
+            "uiautomator2ServerInstallTimeout": 100000
         }
         try:
             driver = Remote('http://localhost:{}/wd/hub'.format(port), desired_caps)
