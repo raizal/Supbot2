@@ -10,6 +10,12 @@ Supbot2 is an unofficial WhatsApp automation library written in Python which can
 - Learn how to install, visit [Supbot2 Documentation](https://adsau59.github.io/Supbot2/index.html)
 - Chat with us on [Discord](http://discord.definex.in)
 
+
+## Requirements
+- selenium = 4.2.0
+- appium-python-client=2.7.1
+
+
 ## Usage
 Following code resends the message received from a contact (in just 5 LOC!).  
 ```python
